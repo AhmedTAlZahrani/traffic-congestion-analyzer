@@ -1,0 +1,12 @@
+city,country,year,congestion_pct,avg_commute_min
+Riyadh,Saudi Arabia,2024,32,30
+Jeddah,Saudi Arabia,2024,28,27
+Dubai,United Arab Emirates,2024,35,29
+Doha,Qatar,2024,26,26
+Cairo,Egypt,2024,44,38
+London,United Kingdom,2024,38,36
+Paris,France,2024,41,34
+New York,USA,2024,37,41
+Los Angeles,USA,2024,36,35
+Toronto,Canada,2024,33,34
+Munich,Germany,2024,25,28
