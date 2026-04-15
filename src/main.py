@@ -8,6 +8,9 @@ from src.indicators import compute_hours_lost, top_n_cities, WORKDAYS
 PLOTS_DIR = Path(__file__).resolve().parents[1] / "plots"
 PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 
+RESULTS_DIR = Path(__file__).resolve().parents[1] / "results"
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+
 AVG_HOURLY_WAGE_USD = 25  # rough global average for cost estimates
 
 
@@ -82,6 +85,25 @@ def plot_cost_impact(df):
     return outpath
 
 
+def write_summary_md(df, path):
+    ranked = df.sort_values("hours_lost", ascending=False)
+    lines = [
+        "# Traffic Congestion Analyzer — Results",
+        "",
+        f"Assumptions: {WORKDAYS} workdays/year, ${AVG_HOURLY_WAGE_USD}/hour average wage.",
+        "",
+        "| City | Country | Congestion % | One-way commute (min) | Hours lost/year | Cost/year (USD) |",
+        "|------|---------|--------------|-----------------------|-----------------|-----------------|",
+    ]
+    for _, r in ranked.iterrows():
+        lines.append(
+            f"| {r['city']} | {r['country']} | {r['congestion_pct']:.0f} | "
+            f"{r['avg_commute_min']:.0f} | {r['hours_lost']:.1f} | "
+            f"{r['cost_impact_usd']:.0f} |"
+        )
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def run():
     print("=== Traffic Congestion Analyzer ===\n")
 
@@ -91,6 +113,14 @@ def run():
     df = compute_kpis(df)
 
     print_summary(df)
+    print()
+
+    csv_out = RESULTS_DIR / "summary.csv"
+    md_out = RESULTS_DIR / "summary.md"
+    df.sort_values("hours_lost", ascending=False).to_csv(csv_out, index=False)
+    write_summary_md(df, md_out)
+    print(f"Saved: {csv_out}")
+    print(f"Saved: {md_out}")
     print()
 
     print("Generating charts...")
