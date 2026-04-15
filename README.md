@@ -18,7 +18,14 @@ This will:
 - Load data from `data/traffic_index_sample.csv`
 - Calculate hours lost, cost impact, and congestion index per city
 - Print a ranked summary to the console
-- Save charts to `plots/`
+- Save charts to `plots/` and the summary table to `results/`
+
+## Running Tests
+
+```bash
+pip install pytest
+pytest tests/
+```
 
 ## Data Format
 
@@ -38,6 +45,10 @@ Annual hours lost = `(avg_commute_min * 2) * (congestion_pct / 100) * 250 workda
 
 Cost impact = hours lost * estimated hourly wage ($25)
 
-## Result
+## Results
+
+The computed table (ranked by hours lost) lives in `results/summary.md` and `results/summary.csv` after each run.
 
 ![Top 10 Hours Lost](plots/top10_hours_lost.png)
+
+![Cost Impact](plots/cost_impact.png)
